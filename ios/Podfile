@@ -8,6 +8,8 @@ target 'ConnectAffoz' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'RNWifi', :path => '../node_modules/react-native-wifi-reborn'
+
   target 'ConnectAffozTests' do
     inherit! :complete
     # Pods for testing

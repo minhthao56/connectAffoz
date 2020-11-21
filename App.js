@@ -1,44 +1,35 @@
-import React, {useEffect} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  StatusBar,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import 'react-native-gesture-handler';
+import React, {useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Login, Home, Connect} from './src/screens';
+import {Button} from './src/components';
 
-import axios from 'axios';
-
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 const App = () => {
-  // useEffect(() => {
-  //   axios
-  //     .post('http://dede.affoz.com/api/v1/authentication/login', {
-  //       username: '0906262849',
-  //       password: '123456789',
-  //     })
-  //     .then((res) => console.log(res.data.accessToken))
-  //     .catch((err) => console.log(err.response.data.message));
-  // }, []);
-
+  const [isShowHome, setIsShowHome] = useState(false);
+  // const handleChangeView = () => {
+  //   setIsShowHome(!isShowHome);
+  // };
   return (
     <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        {/* <Text>Affoz</Text>
-        <View>
-          <TextInput placeholder="Email/Phone" />
-          <TextInput placeholder="Password" />
-          <TouchableOpacity>
-            <Text>Đăng nhập</Text>
-          </TouchableOpacity>
-        </View> */}
-      </SafeAreaView>
+      <NavigationContainer>
+        {!isShowHome ? (
+          <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Auth" component={Login} />
+          </Stack.Navigator>
+        ) : (
+          <Tab.Navigator>
+            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Connect" component={Connect} />
+          </Tab.Navigator>
+        )}
+      </NavigationContainer>
+      {/* <Button onPress={handleChangeView}>Change view</Button> */}
     </>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default App;
