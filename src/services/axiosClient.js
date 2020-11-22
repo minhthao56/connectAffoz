@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+
+const token = "1212";
+
 const axiosClient = axios.create({
-  baseURL: '/api/v1',
+  baseURL: 'http://dede.affoz.com/api/v1/',
   headers: {
     'content-type': 'application/json',
     Authorization: `Bearer ${token}`,
@@ -18,3 +21,4 @@ axiosClient.interceptors.response.use(
     throw err;
   },
 );
+export default axiosClient;

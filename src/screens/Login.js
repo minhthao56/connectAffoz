@@ -1,21 +1,30 @@
+import {unwrapResult} from '@reduxjs/toolkit';
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
-import axios from 'axios';
+import {Alert, StyleSheet, View} from 'react-native';
+import {useDispatch} from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {Input, Button, Logo} from '../components';
+import {login} from '../redux/slice/authSlice';
+import {changeHome} from '../redux/slice/changeView';
+
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  // useEffect(() => {
-  //   axios
-  //     .post('http://dede.affoz.com/api/v1/authentication/login', {
-  //       username: '0906262849',
-  //       password: '123456789',
-  //     })
-  //     .then((res) => console.log(res.data.accessToken))
-  //     .catch((err) => console.log(err.response.data.message));
-  // }, []);
+
+  const dispatch = useDispatch();
+  const handleLogin = async () => {
+    try {
+      const action = login({username, password});
+      const resultDispacth = await dispatch(action);
+      const {accessToken} = unwrapResult(resultDispacth);
+      await AsyncStorage.setItem('accessToken', accessToken);
+      await dispatch(changeHome());
+    } catch (error) {
+     Alert.alert("Email, số điện thoại hoặc mật khẩu của bạn sai!!!")
+    }
+  };
 
   return (
     <View style={Styles.container}>
@@ -34,7 +43,7 @@ export default function Login() {
           onChangeText={(text) => setPassword(text)}
           secureTextEntry={true}
         />
-        <Button>Đăng nhập</Button>
+        <Button onPress={handleLogin}>Đăng nhập</Button>
       </View>
     </View>
   );

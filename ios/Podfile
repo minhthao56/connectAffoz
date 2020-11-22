@@ -10,6 +10,8 @@ target 'ConnectAffoz' do
 
   pod 'RNWifi', :path => '../node_modules/react-native-wifi-reborn'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'ConnectAffozTests' do
     inherit! :complete
     # Pods for testing

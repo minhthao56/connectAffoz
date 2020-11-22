@@ -4,7 +4,7 @@ import {View, Text} from 'react-native';
 export default function Home() {
   return (
     <View>
-      <Text>Home Screen</Text>
+      <Text>Feature is comming soon</Text>
     </View>
   );
 }
