@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import wifi from 'react-native-android-wifi';
-import WifiManager from 'react-native-wifi-reborn';
+// import WifiManager from 'react-native-wifi-reborn';
 import {WifiWizard, HotspotWizard} from 'react-native-wifi-and-hotspot-wizard';
 
 import {Button, Input} from '../../components';
@@ -11,48 +11,41 @@ export default function DetailConnect({route}) {
   const password = '12345678';
   const isWep = false;
   const connectWifi = () => {
-    // WifiManager.connectToProtectedSSID(SSID, password, isWep).then(
-    //   () => {
-    //     console.log('Connected successfully!');
-    //   },
-    //   () => {
-    //     console.log('Connection failed!');
-    //   },
-    // );
-    // WifiManager.getCurrentWifiSSID().then(
-    //   (ssid) => {
-    //     console.log('Your current connected wifi SSID is ' + ssid);
-    //   },
-    //   () => {
-    //     console.log('Cannot get current SSID!');
-    //   },
-    // );
     wifi.findAndConnect(SSID, password, (found) => {
-      console.log(SSID);
-      console.log(found);
       if (found) {
         console.log('wifi is in range');
       } else {
         console.log('wifi is not in range');
       }
     });
-
+    console.log('Scanning Nearby Devices');
     WifiWizard.getNearbyNetworks().then((networks) => {
-      let jsonNetworks = JSON.parse(networks);
-      let network = jsonNetworks.filter((Network) => {
-        return Network.SSID == SSID;
+      console.log(networks);
+      console.log(SSID);
+      console.log(password);
+      let network = networks.filter((network) => {
+        return network.SSID == SSID;
       });
       console.log(network);
-      if (network) {
-        console.log('Loading');
-        let stringified_network = JSON.stringify(network);
-        WifiWizard.connectToNetwork(stringified_network[0], SSID, password)
+      if (network.length < 1) {
+        console.log('network not found');
+        // Toast.show('Network Not Found');
+      } else {
+        // Connect To Network
+        WifiWizard.connectToNetwork(network[0], SSID, password)
           .then((data) => {
+            console.log(data);
             if (data.status == 'connected') {
-              console.log('Done');
+              setConnected(true);
+              console.log(data);
+            } else {
+              console.log('Failed To Connect');
             }
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            console.log(err);
+            console.log('err');
+          });
       }
     });
   };
