@@ -2,11 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, PermissionsAndroid, StyleSheet} from 'react-native';
 import wifi from 'react-native-android-wifi';
 import {Icon} from 'react-native-elements';
-import {Button} from '../components';
 
-export default function Connect() {
+import {Button, OneWifi} from '../../components';
+
+export default function Connect({navigation}) {
   const [listWifi, setListWifi] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [SSIDCurrent, setSSIDCurrent] = useState('');
 
   const permissionsAndroid = async () => {
     try {
@@ -43,25 +45,21 @@ export default function Connect() {
       },
     );
   };
-
+  const getSSIDCurrent = () => {
+    wifi.getSSID((ssid) => {
+      setSSIDCurrent(ssid);
+    });
+  };
   useEffect(() => {
     permissionsAndroid();
     scanWifi();
+    getSSIDCurrent();
   }, []);
-
-  // const checkStatusWifi = () => {
-  //   wifi.isEnabled((isEnabled) => {
-  //     if (isEnabled) {
-  //       console.log('wifi service enabled');
-  //     } else {
-  //       console.log('wifi service is disabled');
-  //     }
-  //   });
-
-  //   wifi.getIP((ip) => {
-  //     console.log(ip);
-  //   });
-  // };
+  const handleDetailWifi = (SSID) => {
+    navigation.navigate('DetailConnect', {
+      SSID: SSID,
+    });
+  };
 
   return (
     <View style={Styles.full}>
@@ -75,18 +73,12 @@ export default function Connect() {
         ) : (
           listWifi.map((item, i) => {
             return (
-              <View key={i} style={Styles.listWifi}>
-                <Icon
-                  name="wifi"
-                  type="feather"
-                  color="#aaa"
-                  size={20}
-                  style={{marginRight: 8}}
-                />
-                <View>
-                  <Text>{item.SSID}</Text>
-                </View>
-              </View>
+              <OneWifi
+                item={item}
+                key={i}
+                handleDetailWifi={handleDetailWifi}
+                isConnect={SSIDCurrent === item.SSID ? true : false}
+              />
             );
           })
         )}
@@ -112,15 +104,6 @@ const Styles = StyleSheet.create({
   constainer: {
     paddingLeft: 8,
     paddingRight: 8,
-  },
-  listWifi: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    padding: 12,
-    borderRadius: 4,
-    borderColor: '#e1e1e1',
-    marginBottom: 8,
   },
   button: {
     marginTop: 'auto',

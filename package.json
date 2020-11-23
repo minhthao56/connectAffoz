@@ -23,9 +23,12 @@
     "react-native-elements": "^3.0.0-alpha.1",
     "react-native-gesture-handler": "^1.8.0",
     "react-native-reanimated": "^1.13.2",
+    "react-native-restart": "0.0.17",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.15.0",
     "react-native-vector-icons": "^7.1.0",
+    "react-native-wifi-and-hotspot-wizard": "^1.0.6-beta.1",
+    "react-native-wifi-reborn": "^4.3.3",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5"
   },
